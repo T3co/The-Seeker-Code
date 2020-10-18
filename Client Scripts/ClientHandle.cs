@@ -18,7 +18,6 @@ public class ClientHandle : MonoBehaviour
         ClientSend.WelcomeReceived(1);
 
         Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
-        GameManager.instance.startButton();
     }
     public static void SpawnPlayer(Packet _packet)
     {

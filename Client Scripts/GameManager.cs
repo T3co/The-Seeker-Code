@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     public void startButton()
     {
+        Debug.Log(Client.instance.myId);
         if (!UIManager.instance.gameStarted && !GameManager.players[Client.instance.myId].IsHost())
         {
             UIManager.instance.startBTN.SetActive(false);
