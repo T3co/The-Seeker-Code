@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
+using TMPro;
 using UnityEngine;
 
 public class ServerHandle
 {
+    //1 min kk
     public static void WelcomeReceived(int _fromClient, Packet _packet)
     {
         int _clientIdCheck = _packet.ReadInt();
         string _username = _packet.ReadString();
         int onlinePlayer = _packet.ReadInt();
+        bool _isHost = false;
 
         NetworkManager.instance.playersOnline += onlinePlayer;
 
@@ -17,7 +21,15 @@ public class ServerHandle
         {
             Debug.Log($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
         }
-        Server.clients[_fromClient].SendIntoGame(_username);
+        if (_fromClient == 1)
+        {
+            _isHost = true;
+        }
+        Server.clients[_fromClient].SendIntoGame(_username, _isHost);
+
+
+            
+        
     }
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
@@ -40,13 +52,13 @@ public class ServerHandle
     {
         Vector3 loc = new Vector3(0f, 5f, 0f);
 
-        _packet.ReadBool();
+        bool timerOn = _packet.ReadBool();
 
         GameTimer gameTimer = NetworkManager.instance.GetComponent<GameTimer>();
 
 
 
-        gameTimer.enabled = true;
+        gameTimer.enabled = timerOn;
         ServerSend.PlayerSeeker();
 
         NetworkManager.instance.MovePlayers(loc);

@@ -14,6 +14,7 @@ public class Client
     public TCP tcp;
     public UDP udp;
 
+
     public Client(int _clientId)
     {
         id = _clientId;
@@ -210,10 +211,10 @@ public class Client
 
     /// <summary>Sends the client into the game and informs other clients of the new player.</summary>
     /// <param name="_playerName">The username of the new player.</param>
-    public void SendIntoGame(string _playerName)
+    public void SendIntoGame(string _playerName, bool _isHost)
     {
         player = NetworkManager.instance.InstantiatePlayer();
-        player.Initialize(id, _playerName);
+        player.Initialize(id, _playerName, _isHost);
 
         // Send all players to the new player
         foreach (Client _client in Server.clients.Values)
@@ -223,6 +224,7 @@ public class Client
                 if (_client.id != id)
                 {
                     ServerSend.SpawnPlayer(id, _client.player);
+
                 }
             }
         }

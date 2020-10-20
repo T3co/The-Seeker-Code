@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     public GameObject startBTN;
     public InputField ipField;
 
-    private Client client; 
+    private Client client;
     private void Awake()
     {
         if (instance == null)
@@ -69,6 +69,24 @@ public class UIManager : MonoBehaviour
         Client.instance.ConnectToServer();
 
         timerText.SetActive(true);
+    }
+    public void HostButton()
+    {
+        if (gameStarted)
+        {
+            startBTN.SetActive(false);
+        }
+        else if(!gameStarted)
+        {
+            if (GameManager.players[Client.instance.myId].IsHost())
+            {
+                startBTN.SetActive(true);
+            }
+            else
+            {
+                return;
+            }
+        }
     }
     public void StartBTN()
     {

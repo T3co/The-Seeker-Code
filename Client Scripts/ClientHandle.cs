@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-
     public static void Welcome(Packet _packet)
     {
         string _msg = _packet.ReadString();
@@ -25,13 +24,11 @@ public class ClientHandle : MonoBehaviour
         string _username = _packet.ReadString();
         Vector3 _position = _packet.ReadVector3();
         Quaternion _rotation = _packet.ReadQuaternion();
+        bool _isHost = _packet.ReadBool();
 
-        GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation);
+        GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation,_isHost);
 
-        if (GameManager.players[Client.instance.myId].id == 1)
-        {
-            GameManager.players[Client.instance.myId].SetHost();
-        }
+        UIManager.instance.HostButton();
     }
     public static void PlayerPosition(Packet _packet)
     {
@@ -110,7 +107,7 @@ public class ClientHandle : MonoBehaviour
 
         UIManager.instance.gameStarted = false;
 
-        GameManager.instance.startButton();
+        UIManager.instance.HostButton();
     }
     public static void Timer(Packet _packet)
     {

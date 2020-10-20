@@ -57,8 +57,7 @@ public class ClientSend : MonoBehaviour
         {
             _packet.Write(UIManager.instance.gameStarted);
 
-            GameManager.instance.startButton();
-
+            UIManager.instance.HostButton();
             SendTCPData(_packet);
         }
     }

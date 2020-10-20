@@ -15,26 +15,6 @@ public class GameManager : MonoBehaviour
     public GameObject itemSpawnerPrefab;
     public GameObject projectilePrefab;
 
-    public void startButton()
-    {
-        Debug.Log(Client.instance.myId);
-        if (!UIManager.instance.gameStarted && !GameManager.players[Client.instance.myId].IsHost())
-        {
-            UIManager.instance.startBTN.SetActive(false);
-        }
-        else if (!UIManager.instance.gameStarted && GameManager.players[Client.instance.myId].IsHost())
-        {
-            UIManager.instance.startBTN.SetActive(true);
-        }
-        else if (UIManager.instance.gameStarted && GameManager.players[Client.instance.myId].IsHost())
-        {
-            UIManager.instance.startBTN.SetActive(false);
-        }
-        else if (UIManager.instance.gameStarted && !GameManager.players[Client.instance.myId].IsHost())
-        {
-            UIManager.instance.startBTN.SetActive(false);
-        }
-    }
     private void Awake()
     {
         if (instance == null)
@@ -47,19 +27,23 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
     }
-    public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
+    public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation, bool _isHost)
     {
+        Debug.Log(_isHost);
         GameObject _player;
         if (_id == Client.instance.myId)
         {
+            
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
+
         }
         else
         {
             _player = Instantiate(playerPrefab, _position, _rotation);
         }
 
-        _player.GetComponent<PlayerManager>().Initialize(_id, _username);
+        _player.GetComponent<PlayerManager>().Initialize(_id, _username, _isHost);
+
         players.Add(_id, _player.GetComponent<PlayerManager>());
     }
     public void SetSeeker()

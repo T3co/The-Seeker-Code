@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool isHost = false;
     public int id;
     public string username;
     public CharacterController controller;
@@ -26,11 +27,12 @@ public class Player : MonoBehaviour
         moveSpeed *= Time.fixedDeltaTime;
         jumpSpeed *= Time.fixedDeltaTime;
     }
-    public void Initialize(int _id, string _username)
+    public void Initialize(int _id, string _username, bool _isHost)
     {
         id = _id;
         username = _username;
         health = maxHealth;
+        isHost = _isHost;
 
         inputs = new bool[5];
     }
@@ -140,7 +142,7 @@ public class Player : MonoBehaviour
             //spawn the player at the lobby
             transform.position = new Vector3(85f, 5f, 0f);
             //spawn the player at the lobby
-            ServerSend.PlayerPosition(this);
+            //ServerSend.PlayerPosition(this);
             StartCoroutine(Respawn());
         }
 

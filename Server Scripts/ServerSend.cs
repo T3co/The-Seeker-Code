@@ -86,7 +86,7 @@ public class ServerSend
             SendTCPData(_toClient, _packet);
         }
     }
-
+    
     /// <summary>Tells a client to spawn a player.</summary>
     /// <param name="_toClient">The client that should spawn the player.</param>
     /// <param name="_player">The player to spawn.</param>
@@ -98,6 +98,7 @@ public class ServerSend
             _packet.Write(_player.username);
             _packet.Write(_player.transform.position);
             _packet.Write(_player.transform.rotation);
+            _packet.Write(_player.isHost);
 
             SendTCPData(_toClient, _packet);
         }
@@ -114,6 +115,7 @@ public class ServerSend
             SendUDPDataToAll(_packet);
         }
     }
+    
     /// <summary>Sends a player's updated rotation to all clients except to himself (to avoid overwriting the local player's rotation).</summary>
     /// <param name="_player">The player whose rotation to update.</param>
     public static void PlayerRotation(Player _player)

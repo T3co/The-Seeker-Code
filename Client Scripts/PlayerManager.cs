@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
+    public bool isHost = false;
     public int id;
     public string username;
     public float health;
@@ -12,7 +13,6 @@ public class PlayerManager : MonoBehaviour
     public int itemCount = 0;
 
     public bool isSeeker = false;
-    public static bool isHost = false;
     public static float timer;
     public Text timerText;
 
@@ -26,12 +26,12 @@ public class PlayerManager : MonoBehaviour
     private Vector3 toPos = Vector3.zero;
     private float lastTime;
 
-    public GameObject startBTN;
-    public void Initialize(int _id, string _username)
+    public void Initialize(int _id, string _username, bool _isHost)
     {
         id = _id;
         username = _username;
         health = maxHealth;
+        isHost = _isHost;
     }
     public void SetHealth(float _health)
     {
@@ -69,16 +69,14 @@ public class PlayerManager : MonoBehaviour
     {
         timerText = GameObject.FindGameObjectWithTag("timerTXT").GetComponent<Text>();
 
-        GameManager.instance.startButton();
     }
     private void Update()
     {
+        GunEnable();
+        this.transform.position = Vector3.Lerp(fromPos, toPos, (Time.time - lastTime) / (1.0f / 30));
+
         if (GameManager.players[Client.instance.myId].isSeeker)
         {
-
-            this.gameObject.tag = "Seeker";
-            pistolModel.SetActive(true);
-
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 ClientSend.PlayerShoot(playerController.camTransform.forward);
@@ -86,36 +84,39 @@ public class PlayerManager : MonoBehaviour
         }
         else if (!GameManager.players[Client.instance.myId].isSeeker)
         {
-            this.gameObject.tag = "Player";
-            pistolModel.SetActive(false);
-
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Debug.Log("Right Click");
                 ClientSend.PlayerThrowItem(playerController.camTransform.forward);
             }
         }
 
+
         timerText.text = timer.ToString("F1");
-        //Mouse 
+
+
         if (Input.GetKeyDown(KeyCode.M))
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
         }
-
-        if (!GameManager.players[Client.instance.myId].isSeeker)
+    }
+    public void GunEnable()
+    {
+        if (isSeeker)
+        {
+            pistolModel.SetActive(true);
+        }
+        else
         {
             pistolModel.SetActive(false);
         }
-
-        this.transform.position = Vector3.Lerp(fromPos, toPos, (Time.time - lastTime) / (1.0f / 30));
     }
     public void SetPosition(Vector3 position)
     {
+
         fromPos = toPos;
         toPos = position;
         lastTime = Time.time;

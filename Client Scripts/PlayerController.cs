@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Transform camTransform;
-    private void FixedUpdate()
+    private void FixedUpdate() 
     {
         SendInputToServer();
+
+
+        
     }
     private void SendInputToServer()
     {
