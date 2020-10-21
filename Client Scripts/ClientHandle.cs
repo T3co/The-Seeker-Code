@@ -28,7 +28,7 @@ public class ClientHandle : MonoBehaviour
 
         GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation,_isHost);
 
-        UIManager.instance.HostButton();
+        GameManager.players[Client.instance.myId].HostButton();
     }
     public static void PlayerPosition(Packet _packet)
     {
@@ -107,7 +107,7 @@ public class ClientHandle : MonoBehaviour
 
         UIManager.instance.gameStarted = false;
 
-        UIManager.instance.HostButton();
+        GameManager.players[Client.instance.myId].HostButton();
     }
     public static void Timer(Packet _packet)
     {

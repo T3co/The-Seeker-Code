@@ -70,24 +70,7 @@ public class UIManager : MonoBehaviour
 
         timerText.SetActive(true);
     }
-    public void HostButton()
-    {
-        if (gameStarted)
-        {
-            startBTN.SetActive(false);
-        }
-        else if(!gameStarted)
-        {
-            if (GameManager.players[Client.instance.myId].IsHost())
-            {
-                startBTN.SetActive(true);
-            }
-            else
-            {
-                return;
-            }
-        }
-    }
+    
     public void StartBTN()
     {
         gameStarted = true;

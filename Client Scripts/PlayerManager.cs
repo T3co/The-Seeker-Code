@@ -65,6 +65,24 @@ public class PlayerManager : MonoBehaviour
     {
         return isHost;
     }
+    public void HostButton()
+    {
+        if (UIManager.instance.gameStarted)
+        {
+            UIManager.instance.startBTN.SetActive(false);
+        }
+        else if (!UIManager.instance.gameStarted)
+        {
+            if (GameManager.players[Client.instance.myId].IsHost())
+            {
+                UIManager.instance.startBTN.SetActive(true);
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
     private void Start()
     {
         timerText = GameObject.FindGameObjectWithTag("timerTXT").GetComponent<Text>();

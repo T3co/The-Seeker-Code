@@ -214,6 +214,8 @@ public class ServerSend
             gameTimer.enabled = false;
 
             NetworkManager.instance.MovePlayers(loc);
+
+            SendTCPDataToAll(_packet);
         }
     }
     public static void Timer(float timer)
