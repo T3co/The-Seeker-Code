@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ServerHandle
 {
-    //1 min kk
     public static void WelcomeReceived(int _fromClient, Packet _packet)
     {
         int _clientIdCheck = _packet.ReadInt();
@@ -53,6 +52,8 @@ public class ServerHandle
         Vector3 loc = new Vector3(0f, 5f, 0f);
 
         bool timerOn = _packet.ReadBool();
+
+        NetworkManager.instance.gameStarted = timerOn;
 
         GameTimer gameTimer = NetworkManager.instance.GetComponent<GameTimer>();
 

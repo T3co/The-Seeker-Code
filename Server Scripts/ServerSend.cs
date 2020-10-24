@@ -162,14 +162,11 @@ public class ServerSend
         using (Packet _packet = new Packet((int)ServerPackets.playerSeeker))
         {
             int playersOnline = NetworkManager.instance.playersOnline + 1;
-            int random = Random.Range(1, playersOnline);
+            int randomId = Random.Range(1, playersOnline);
 
-            _packet.Write(random);
+            NetworkManager.instance.seekerID = randomId;
 
-            Player player = NetworkManager.instance.playerPrefab.GetComponent<Player>();
-
-            Debug.Log(playersOnline);
-            Debug.Log(random);
+            _packet.Write(randomId);
 
             SendTCPDataToAll(_packet);
         }

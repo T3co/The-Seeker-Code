@@ -15,11 +15,8 @@ public class ItemSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (hasItem)
-        {
             transform.Rotate(Vector3.up, itemBobSpeed * Time.deltaTime, Space.World);
             transform.position = basePosition + new Vector3(0f, 0.25f * Mathf.Sin(Time.time * itemBobSpeed), 0f);
-        }
     }
     public void Initialize(int _spawnerId, bool _hasItem)
     {

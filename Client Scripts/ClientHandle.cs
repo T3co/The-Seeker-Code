@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
+    static int tempID = 0;
     public static void Welcome(Packet _packet)
     {
         string _msg = _packet.ReadString();
@@ -27,8 +28,6 @@ public class ClientHandle : MonoBehaviour
         bool _isHost = _packet.ReadBool();
 
         GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation,_isHost);
-
-        GameManager.players[Client.instance.myId].HostButton();
     }
     public static void PlayerPosition(Packet _packet)
     {
@@ -74,10 +73,11 @@ public class ClientHandle : MonoBehaviour
     {
         int _id = _packet.ReadInt();
 
-        if(_id == GameManager.players[Client.instance.myId].id)
-        {
-            GameManager.instance.SetSeeker();
-        }
+        tempID = _id;
+
+        GameManager.players[_id].SetSeeker();
+        GameManager.players[_id].GunEnable();
+
     }
     public static void CreateItemSpawner(Packet _packet)
     {
@@ -104,6 +104,7 @@ public class ClientHandle : MonoBehaviour
     public static void GameOver(Packet _packet)
     {
         GameManager.players[Client.instance.myId].isSeeker = false;
+        GameManager.players[tempID].GunDisable();
 
         UIManager.instance.gameStarted = false;
 

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     public bool isHost = false;
+    
     public int id;
     public string username;
     public float health;
@@ -45,13 +46,11 @@ public class PlayerManager : MonoBehaviour
     {
         playerModel.enabled = false;
         googleModel.enabled = false;
-        pistolModel.SetActive(false);
     }
     public void Respawn()
     {
-        playerModel.enabled = false;
-        googleModel.enabled = false;
-        pistolModel.SetActive(false);
+        playerModel.enabled = true;
+        googleModel.enabled = true;
         SetHealth(maxHealth);
     }
 
@@ -64,6 +63,11 @@ public class PlayerManager : MonoBehaviour
     public bool IsHost()
     {
         return isHost;
+    }
+
+    public void SetSeeker()
+    {
+        isSeeker = true;
     }
     public void HostButton()
     {
@@ -86,11 +90,11 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         timerText = GameObject.FindGameObjectWithTag("timerTXT").GetComponent<Text>();
-
+        HostButton();
+        pistolModel.SetActive(false);
     }
     private void Update()
     {
-        GunEnable();
         this.transform.position = Vector3.Lerp(fromPos, toPos, (Time.time - lastTime) / (1.0f / 30));
 
         if (GameManager.players[Client.instance.myId].isSeeker)
@@ -99,6 +103,7 @@ public class PlayerManager : MonoBehaviour
             {
                 ClientSend.PlayerShoot(playerController.camTransform.forward);
             }
+
         }
         else if (!GameManager.players[Client.instance.myId].isSeeker)
         {
@@ -108,29 +113,27 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-
         timerText.text = timer.ToString("F1");
 
 
         if (Input.GetKeyDown(KeyCode.M))
         {
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
     public void GunEnable()
     {
-        if (isSeeker)
-        {
-            pistolModel.SetActive(true);
-        }
-        else
-        {
-            pistolModel.SetActive(false);
-        }
+            pistolModel.SetActive(true);   
+    }
+    public void GunDisable()
+    {
+        pistolModel.SetActive(false);
     }
     public void SetPosition(Vector3 position)
     {

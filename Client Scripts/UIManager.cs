@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
         }
         if (ipField.text == "amit")
         {
-            Client.instance.ip = "176.231.189.191";
+            Client.instance.ip = "176.231.189.33";
             ipField.text = Client.instance.ip;
         }
         Client.instance.ip = ipField.text;

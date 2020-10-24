@@ -10,6 +10,8 @@ public class NetworkManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public GameObject projectilePrefab;
+    public bool gameStarted = false;
+    public int seekerID;
     private void Awake()
     {
         if (instance == null)
@@ -25,11 +27,35 @@ public class NetworkManager : MonoBehaviour
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = 120;
 
         Server.Start(50, 26050);
     }
+    private void Update()
+    {
+        if (Server.clients.Count == 0)
+        {
+            return;
+        }
+        else
+        {
 
+            foreach (Client _cliet in Server.clients.Values)
+            {
+                if (_cliet.player.id == seekerID)
+                {
+                    if (_cliet.player.isDead)
+                    {
+                        ServerSend.GameOver();
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+    }
     private void OnApplicationQuit()
     {
         Server.Stop();
@@ -46,6 +72,8 @@ public class NetworkManager : MonoBehaviour
             {
                 if (_client.player != null)
                 {
+                    _client.player.health = _client.player.maxHealth;
+                    _client.player.itemAmount = 0;
                     _client.player.MoveToPos(location);
                 }
             }

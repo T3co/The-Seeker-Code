@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     private bool[] inputs;
     private float yVelocity = 0;
 
+    public bool isDead = false;
+
     private void Start()
     {
         gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
@@ -131,18 +133,20 @@ public class Player : MonoBehaviour
     {
         if (health <= 0f)
         {
+            isDead = false;
             return;
         }
 
         health -= _damage;
         if (health <= 0f)
         {
+            isDead = true;
+
             health = 0f;
             controller.enabled = false;
-            //spawn the player at the lobby
             transform.position = new Vector3(85f, 5f, 0f);
-            //spawn the player at the lobby
-            //ServerSend.PlayerPosition(this);
+
+            ServerSend.PlayerPosition(this);
             StartCoroutine(Respawn());
         }
 
@@ -154,6 +158,7 @@ public class Player : MonoBehaviour
 
         health = maxHealth;
         controller.enabled = true;
+        isDead = false;
         ServerSend.PlayerRespawned(this);
     }
     public bool AttemptPickupItem()
